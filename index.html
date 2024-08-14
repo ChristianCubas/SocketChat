@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/main.css" />
+    <title>Chat Grupal</title>
+  </head>
+  <body>
+    <div id="ctn_principal">
+      <div>
+        <ul id="mensajes"></ul>
+      </div>
+      <br />
+      <form action="" id="formulario">
+        <input type="text" id="entrada" placeholder="Escribir mensaje ..." />
+        <input type="submit" value="Enviar" id="enviar" />
+      </form>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      const message = document.getElementById('mensajes');
+      const input = document.getElementById('entrada');
+      const form = document.getElementById("formulario");
+
+      form.addEventListener('submit',(e)=>{
+        e.preventDefault();
+        const valor = input.value;
+        input.value=""
+        socket.emit('chat message', valor);
+      })
+
+      socket.on('chat message',(msg)=>{
+        const li = document.createElement('li');
+        li.innerHTML=`<strong>${msg}</strong>`
+        message.appendChild(li)
+      })
+    </script>
+  </body>
+</html>
